@@ -1,5 +1,7 @@
 package app.backpackandroid;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -7,17 +9,27 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+    private GoogleMap               mMap;
+    private List<MarkerOptions>    markerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        markerList = new ArrayList<MarkerOptions>();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -38,12 +50,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        googleMap.setOnMapLongClickListener(
+                new GoogleMap.OnMapLongClickListener() {
+                                                @Override
+                                                public void onMapLongClick(LatLng point) {
+                                                    MarkerOptions newMarker = new MarkerOptions().position(point).title("My point").snippet("new point");
+                                                    mMap.addMarker(newMarker);
+                                                    markerList.add(newMarker);
+                                                    //ADD TO LIST
+                                                    //CHANGE TO ADD VIEW !!!!!!!!!!!!!!!!!
+                                                }
+                                            }
+        );
+
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+
+        Bitmap bitmap;
+        bitmap = getImage("http://jbinformatique.com/2017/12/09/developpement-android-zoom-imageview-java");
 
         LatLng tek = new LatLng(48.81552199999999, 2.362973000000011);
-        mMap.addMarker(new MarkerOptions().position(tek).title("Tek").snippet("tetetetetetetetetetetet"));
+        mMap.addMarker(new MarkerOptions().position(tek).title("Tek").snippet("tetetetetetetetetetetet")/*.icon(BitmapDescriptorFactory.fromBitmap(bitmap))*/);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(tek));
+    }
+
+    public Bitmap getImage(String img) {
+        try {
+            URL url = new URL(img);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (Exception e) {
+            System.out.println("CA MARCHE PAS !!");
+            e.printStackTrace();
+            return null;
+        }
     }
 }
