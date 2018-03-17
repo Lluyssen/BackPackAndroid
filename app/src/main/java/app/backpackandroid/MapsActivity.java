@@ -2,16 +2,27 @@ package app.backpackandroid;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,7 +33,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.InputStream;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +60,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap               mMap;
     private List<Point>    markerList;
+    private static int SELECTED_PICTURE = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +104,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker in Sydney and move the camera
 
+        HttpRequest httpRequest = new HttpRequest(MapsActivity.this);
+        //httpRequest.PostUser("newUser", "newUser");
+        //httpRequest.GetToken("oui", "oui");
+        httpRequest.GetUsers();
+        //httpRequest.PostPois("TESTPOI", "desc test", 65.9999999, 45.9, "eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTMyNDU0NCwiZXhwIjoxNTIxMzI1MTQ0fQ.eyJpZCI6Mn0.kS_IP6obDLiF6GksjhdDdkM_ge7kKIT0z3pVq4RpF_s");
+        //httpRequest.GetPois("eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTMyNDU0NCwiZXhwIjoxNTIxMzI1MTQ0fQ.eyJpZCI6Mn0.kS_IP6obDLiF6GksjhdDdkM_ge7kKIT0z3pVq4RpF_s");
+
+
         Bitmap bitmap;
         bitmap = getImage("http://jbinformatique.com/2017/12/09/developpement-android-zoom-imageview-java");
 
@@ -96,11 +120,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(tek));
     }
 
+    public static boolean isPortOpen(final String ip, final int port, final int timeout) {
+
+        try {
+            Socket socket = new Socket();
+            socket.connect(new InetSocketAddress(ip, port), timeout);
+            socket.close();
+            return true;
+        }
+
+        catch(ConnectException ce){
+            ce.printStackTrace();
+            return false;
+        }
+
+        catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
     public void addPoint(LatLng point)
     {
         final Dialog dialog = new Dialog(MapsActivity.this);
         View view = getLayoutInflater().inflate(R.layout.add_point, null);
         Button addButton = (Button) view.findViewById(R.id.addBtn);
+        ImageButton addPhoto = (ImageButton) view.findViewById(R.id.addPhoto);
         final EditText editTextName = (EditText) view.findViewById(R.id.editName);
 
         dialog.setContentView(view);
@@ -118,10 +163,47 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     mMap.addMarker(newMarker);
                     markerList.add(new Point(newMarker));
                     dialog.dismiss();
+                    HttpRequest httpRequest = new HttpRequest(MapsActivity.this);
+                    //httpRequest.GetToken("oui", "oui");
                 }
             }
         });
 
+       addPhoto.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               Intent i = new Intent(
+                       Intent.ACTION_PICK,
+                       android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+               startActivityForResult(i, SELECTED_PICTURE);
+           }
+       });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SELECTED_PICTURE && resultCode == RESULT_OK)
+        {
+            //setContentView(R.layout.add_point);
+            //LE INFLATE CA MARCHE PAS
+            View view = getLayoutInflater().inflate(R.layout.add_point, null);
+            //View view = getLayoutInflater().inflate(R.layout.test, null);
+
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            ImageView imageView = (ImageView) view.findViewById(R.id.imageUploadPrev);
+            //ImageView imageView = (ImageView) findViewById(R.id.imageUploadPrev);
+            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+        }
     }
 
     public Bitmap getImage(String img) {
