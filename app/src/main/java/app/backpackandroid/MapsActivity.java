@@ -65,7 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<String>    photoList;
     private static int SELECTED_PICTURE = 1;
     private HttpRequest httpRequest;
-    String token = "eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTM5MTkxNCwiZXhwIjoxNTIxMzkyNTE0fQ.eyJpZCI6Mn0.hkk4UvP6wGZZGXdOP3Qbx632mYEXasgEIK5JCDBYOCw";
+    String token = "eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTM5Mzg0OSwiZXhwIjoxNTIxMzk0NDQ5fQ.eyJpZCI6Mn0.MxlVtnlfgGnUh-FxCWOoTGRQ1ATA-kRyxpZed3abWRk";
 
 
     @Override
