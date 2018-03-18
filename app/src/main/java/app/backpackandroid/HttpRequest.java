@@ -11,13 +11,29 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.android.volley.Response;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
 /**
  * Created by guillaume on 16/03/18.
@@ -26,27 +42,22 @@ import java.util.Map;
 public class HttpRequest {
 
     //private String local_url = "http://10.0.2.2:5000/";
-    private String ip = "192.168.1.45";
+    private String ip = "10.41.174.4";
     private String local_url = "http://" + ip + ":5000/";
     private Context context;
+    private String request_response = new String();
+    GoogleMap mMap;
 
-    public HttpRequest(Context ctx)
+    public HttpRequest(Context ctx, GoogleMap Map)
     {
         context = ctx;
+        mMap = Map;
     }
 
-    public String Get(final String url, final Map<String, String> headers)
+    public void Get(final String url, final Map<String, String> headers, Response.Listener<String> listener)
     {
-        final String[] test = new String[1];
         RequestQueue queue = Volley.newRequestQueue(context);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new com.android.volley.Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("RESP = " + response);
-                        test[0] = response;
-                }
-    }, new Response.ErrorListener() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, listener, new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
             System.out.println("ERROR ON GET REQUEST URL = " + url);
@@ -59,7 +70,11 @@ public class HttpRequest {
             }
         };
         queue.add(stringRequest);
-        return test[0];
+    }
+
+    public String GetResponse()
+    {
+        return request_response;
     }
 
     public void Post(String url, final Map<String,String> data, final Map<String,String> header)
@@ -105,6 +120,8 @@ public class HttpRequest {
 
     public void GetToken(final String username, final String password)
     {
+        //FAIRE REQUETTE SYNCHRONOUS https://stackoverflow.com/questions/16904741/can-i-do-a-synchronous-request-with-volley
+        //OU APPELER UN FONCTION POUR RECUPE LE TOKEN DANS ONRESPONSE
         String url = local_url + "token";
 
         Map<String, String> headers = new HashMap<String, String>();
@@ -113,7 +130,15 @@ public class HttpRequest {
         headers.put("Content-Type", "application/json");
         headers.put("Authorization", auth);
 
-       Get(url, headers);
+        Response.Listener listener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                System.out.println("RESP = " + response);
+                request_response = response;
+            }
+        };
+
+       Get(url, headers, listener);
     }
 
     public void GetUsers()
@@ -121,7 +146,73 @@ public class HttpRequest {
         String url = local_url + "users";
 
         Map<String, String> headers = new HashMap<String, String>();
-        Get(url, headers);
+        Response.Listener listener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                System.out.println("USERS = " + response);
+                request_response = response;
+
+                JSONArray jsonarray = null;
+                try {
+                    jsonarray = new JSONArray(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < jsonarray.length(); i++) {
+                    JSONObject jsonobject = null;
+                    try {
+                        jsonobject = jsonarray.getJSONObject(i);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        String name = jsonobject.getString("username");
+                        System.out.println("LOOLOLO = " + name);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        String url = jsonobject.getString("url");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        Get(url, headers, listener);
+    }
+
+    public void parsePOIS(String response)
+    {
+        JSONArray jsonarray = null;
+
+        try {
+            jsonarray = new JSONArray(response);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < jsonarray.length(); i++) {
+            JSONObject jsonobject = null;
+            try {
+                jsonobject = jsonarray.getJSONObject(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                String name = jsonobject.getString("name");
+                String lats = jsonobject.getString("lat");
+                String longs = jsonobject.getString("long");
+
+                double longitude = Double.parseDouble(longs);
+                double lat = Double.parseDouble(lats);
+                System.out.println("ID POINT = " + jsonobject.getString("id"));
+                LatLng pos = new LatLng(lat,longitude);
+                MarkerOptions marker = new MarkerOptions().position(pos).title(name);
+                mMap.addMarker(marker);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void GetPois(String token)
@@ -130,7 +221,19 @@ public class HttpRequest {
 
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("Authorization", "Bearer " + token);
-        Get(url, headers);
+
+        Response.Listener listener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                System.out.println("RESP = " + response);
+                request_response = response;
+
+                parsePOIS(response);
+                //display all points
+            }
+        };
+
+        Get(url, headers, listener);
     }
 
     public void PostPois(String name, String desc, double latitude, double longitude, String token)
@@ -141,6 +244,8 @@ public class HttpRequest {
         point.put("lat", Double.toString(latitude));
         point.put("long", Double.toString(longitude));
 
+        System.out.println("POST Lat = " + latitude);
+        System.out.println("POST Long = " + longitude);
 
         Map<String, String> header = new HashMap<String, String>();
         header.put("Authorization", "Bearer " + token);
