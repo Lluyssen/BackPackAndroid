@@ -1,8 +1,15 @@
 package app.backpackandroid;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.Image;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +27,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -30,6 +39,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
     }
 
     @Override
@@ -46,6 +56,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 InfoDialog(marker);
             }
         });
+
+        Button button = (Button) findViewById(R.id.PositionBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                GPStracker g = new GPStracker(getApplicationContext());
+                Location l = g.getLocation();
+                if (l != null) {
+                    double lat = l.getAltitude();
+                    double lon = l.getLongitude();
+                    Toast.makeText(getApplicationContext(), "LAT : " + lat + " \n LON : " + lon, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     public void InfoDialog(Marker marker) {
@@ -55,7 +80,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         View view = getLayoutInflater().inflate(R.layout.infowindow, null);
         Button addButton = (Button) view.findViewById(R.id.closeBtn);
         ImageView addImage = view.findViewById(R.id.DisplayImage);
-        Drawable new_image= getResources().getDrawable(R.drawable.plage);
+        Drawable new_image = getResources().getDrawable(R.drawable.plage);
         addImage.setBackgroundDrawable(new_image);
         TextView addText = view.findViewById(R.id.Textinfo);
         addText.setText("Guillaume ca marche");
@@ -70,3 +95,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 }
+
