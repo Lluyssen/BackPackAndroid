@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,7 +62,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap               mMap;
     private List<Point>    markerList;
+    private List<String>    photoList;
     private static int SELECTED_PICTURE = 1;
+    private HttpRequest httpRequest;
+    String token = "eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTM5Mzg0OSwiZXhwIjoxNTIxMzk0NDQ5fQ.eyJpZCI6Mn0.MxlVtnlfgGnUh-FxCWOoTGRQ1ATA-kRyxpZed3abWRk";
 
 
     @Override
@@ -68,6 +73,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         markerList = new ArrayList<Point>();
+        photoList = new ArrayList<String>();
+        //HttpRequest httpRequest = new HttpRequest(MapsActivity.this);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -87,6 +95,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        httpRequest = new HttpRequest(MapsActivity.this, mMap);
 
         googleMap.setOnMapLongClickListener(
                 new GoogleMap.OnMapLongClickListener() {
@@ -102,14 +111,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                             }
         );
 
-        // Add a marker in Sydney and move the camera
-
-        HttpRequest httpRequest = new HttpRequest(MapsActivity.this);
         //httpRequest.PostUser("newUser", "newUser");
         //httpRequest.GetToken("oui", "oui");
-        httpRequest.GetUsers();
+        //httpRequest.GetUsers();
         //httpRequest.PostPois("TESTPOI", "desc test", 65.9999999, 45.9, "eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTMyNDU0NCwiZXhwIjoxNTIxMzI1MTQ0fQ.eyJpZCI6Mn0.kS_IP6obDLiF6GksjhdDdkM_ge7kKIT0z3pVq4RpF_s");
-        //httpRequest.GetPois("eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTMyNDU0NCwiZXhwIjoxNTIxMzI1MTQ0fQ.eyJpZCI6Mn0.kS_IP6obDLiF6GksjhdDdkM_ge7kKIT0z3pVq4RpF_s");
+        httpRequest.GetPois(token);
 
 
         Bitmap bitmap;
@@ -163,7 +169,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     mMap.addMarker(newMarker);
                     markerList.add(new Point(newMarker));
                     dialog.dismiss();
-                    HttpRequest httpRequest = new HttpRequest(MapsActivity.this);
+                    System.out.println("Lat = " + newMarker.getPosition().latitude);
+                    System.out.println("Long = " + newMarker.getPosition().longitude);
+
+                    httpRequest.PostPois(editTextName.getText().toString(), "no desc", newMarker.getPosition().latitude, newMarker.getPosition().longitude, token);
+                    //HttpRequest httpRequest = new HttpRequest(MapsActivity.this);
                     //httpRequest.GetToken("oui", "oui");
                 }
             }
@@ -181,14 +191,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
        });
     }
 
+    public void addPhoto(View view, String picturePath)
+    {
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SELECTED_PICTURE && resultCode == RESULT_OK)
         {
             //setContentView(R.layout.add_point);
-            //LE INFLATE CA MARCHE PAS
+
             View view = getLayoutInflater().inflate(R.layout.add_point, null);
-            //View view = getLayoutInflater().inflate(R.layout.test, null);
 
             Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -200,8 +214,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
 
-            ImageView imageView = (ImageView) view.findViewById(R.id.imageUploadPrev);
+
+            photoList.add(picturePath); //ca ajoute trop tard
+
             //ImageView imageView = (ImageView) findViewById(R.id.imageUploadPrev);
+
+            ImageView imageView = (ImageView) view.findViewById(R.id.imageUploadPrev);
             imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         }
     }
