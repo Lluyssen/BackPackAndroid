@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -65,8 +66,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<String>    photoList;
     private static int SELECTED_PICTURE = 1;
     private HttpRequest httpRequest;
-    String token = "eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTM5Mzg0OSwiZXhwIjoxNTIxMzk0NDQ5fQ.eyJpZCI6Mn0.MxlVtnlfgGnUh-FxCWOoTGRQ1ATA-kRyxpZed3abWRk";
-
+    String token = "eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTQ1NTEwMiwiZXhwIjoxMTUyMTQ1NTEwMX0.eyJpZCI6Mn0.qT19ib8C6x1Di-gUKoy6PZJTR1kYX6IOZeYzgVGF19g";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +116,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //httpRequest.GetUsers();
         //httpRequest.PostPois("TESTPOI", "desc test", 65.9999999, 45.9, "eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTMyNDU0NCwiZXhwIjoxNTIxMzI1MTQ0fQ.eyJpZCI6Mn0.kS_IP6obDLiF6GksjhdDdkM_ge7kKIT0z3pVq4RpF_s");
         httpRequest.GetPois(token);
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                InfoDialog(marker);
+            }
+        });
 
 
         Bitmap bitmap;
@@ -124,6 +130,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng tek = new LatLng(48.81552199999999, 2.362973000000011);
         mMap.addMarker(new MarkerOptions().position(tek).title("Tek").snippet("tetetetetetetetetetetet")/*.icon(BitmapDescriptorFactory.fromBitmap(bitmap))*/);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(tek));
+    }
+
+    public void InfoDialog(Marker marker) {
+
+        final Dialog dialog = new Dialog(MapsActivity.this);
+        dialog.requestWindowFeature(getWindow().FEATURE_NO_TITLE);
+        View view = getLayoutInflater().inflate(R.layout.infowindow, null);
+        Button addButton = (Button) view.findViewById(R.id.closeBtn);
+        ImageView addImage = view.findViewById(R.id.DisplayImage);
+        Drawable new_image= getResources().getDrawable(R.drawable.plage);
+        addImage.setBackgroundDrawable(new_image);
+        TextView addText = view.findViewById(R.id.Textinfo);
+        addText.setText(marker.getTitle());
+        dialog.setContentView(view);
+        dialog.setCancelable(true);
+        dialog.show();
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
     }
 
     public static boolean isPortOpen(final String ip, final int port, final int timeout) {
