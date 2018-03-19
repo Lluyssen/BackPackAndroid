@@ -15,16 +15,55 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center|bottom">
 
         <Button
             android:id="@+id/PositionBtn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="POSITION"
-            android:gravity="center_horizontal|center_vertical"
+            android:gravity="center"
+            android:paddingLeft="28dp"
+            android:drawableStart="@drawable/ic_location_on_white_24dp"
             android:background="@color/colorGrayB"
-            android:textColor="@color/colorWhite" />
+            android:layout_width="77dp"
+            android:layout_height="40dp" />
+
+        <Button
+            android:id="@+id/AccountBtn"
+            android:gravity="center"
+            android:paddingLeft="28dp"
+            android:drawableStart="@drawable/ic_account_box_white_24dp"
+            android:background="@color/colorGrayB"
+            android:layout_width="76dp"
+            android:layout_height="40dp" />
+
+        <Button
+            android:id="@+id/HomeBtn"
+            android:gravity="center"
+            android:paddingLeft="28dp"
+            android:drawableStart="@drawable/ic_home_white_24dp"
+            android:background="@color/colorGrayB"
+            android:layout_width="77dp"
+            android:layout_height="40dp" />
+
+        <Button
+            android:id="@+id/ParametreBtn"
+            android:gravity="center"
+            android:paddingLeft="28dp"
+            android:drawableStart="@drawable/ic_settings_white_24dp"
+            android:background="@color/colorGrayB"
+            android:layout_width="77dp"
+            android:layout_height="40dp" />
+
+        <Button
+            android:id="@+id/MenuBtn"
+            android:gravity="center"
+            android:paddingLeft="28dp"
+            android:drawableStart="@drawable/ic_map_black_24dp"
+            android:background="@color/colorGrayB"
+            android:layout_width="77dp"
+            android:layout_height="40dp" />
 
     </LinearLayout>
+
 </FrameLayout>
