@@ -1,11 +1,11 @@
-# Product Name
-> Short blurb about what your product does.
+# BACKPACK ANDROID APPLICATION
+> It's the Android part of the BackPack Project create by Guillaume And Lino.
 
 [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
 [![Downloads Stats][npm-downloads]][npm-url]
 
-One to two paragraph statement about your product and what it does.
+Backpack est une application communautaire pour ordinateur et smartphone. Elle permet à ses utilisateurs de partir à l’aventure en ayant prévu son chemin ou non, le tout en spécifiant les points de passages. Au cours de leur aventure, les randonneurs peuvent partager leurs expériences, en mettant sur l’application des photos, ou des commentaires.
 
 ![](header.png)
 
@@ -14,29 +14,23 @@ One to two paragraph statement about your product and what it does.
 OS X & Linux:
 
 ```sh
-npm install my-crazy-module --save
+   Need Android Studio and open the project with it
 ```
 
 Windows:
 
 ```sh
-edit autoexec.bat
+   Need Android Studio and open the project with it
 ```
 
-## Usage example
+## FEATHURE  
 
-A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.
-
-_For more examples and usage, please refer to the [Wiki][wiki]._
-
-## Development setup
-
-Describe how to install all development dependencies and how to run an automated test-suite of some kind. Potentially do this for multiple platforms.
-
-```sh
-make install
-npm test
-```
+-> Login Page
+-> Register Page
+-> Google Map view
+-> Add a personalisable interest Point
+-> Show the info of a interest Point
+-> Display Géolocalisation with out internet
 
 ## Release History
 
@@ -53,21 +47,18 @@ npm test
 * 0.0.1
     * Work in progress
 
-## Meta
+## Team
 
-Your Name – [@YourTwitter](https://twitter.com/dbader_org) – YourEmail@example.com
+Team Manager
+   Lino Luyssen
 
-Distributed under the XYZ license. See ``LICENSE`` for more information.
-
-[https://github.com/yourname/github-link](https://github.com/dbader/)
-
-## Contributing
-
-1. Fork it (<https://github.com/yourname/yourproject/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
+Android
+   Hebant Guillaume
+   
+Web
+   Louvet Thomas
+   Goetschy Théo
+   
 
 <!-- Markdown link & img dfn's -->
 [npm-image]: https://img.shields.io/npm/v/datadog-metrics.svg?style=flat-square
