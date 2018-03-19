@@ -25,12 +25,14 @@ Windows:
 
 ## FEATHURE  
 
--> Login Page
--> Register Page
--> Google Map view
--> Add a personalisable interest Point
--> Show the info of a interest Point
--> Display Géolocalisation with out internet
+
+* Login Page
+* Register Page
+* Google Map View
+* Add a personalisable interest Point
+* Show the info of the interest Point
+* Display Géolocalisation with out internet
+* Connect with the BackPack APi
 
 ## Release History
 
