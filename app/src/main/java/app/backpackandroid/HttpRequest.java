@@ -2,7 +2,9 @@ package app.backpackandroid;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Base64;
 import android.widget.Toast;
 
@@ -45,6 +47,7 @@ public class HttpRequest {
     private String ip = "10.41.174.4";
     private String local_url = "http://" + ip + ":5000/";
     private Context context;
+    private String token = new String();
     private String request_response = new String();
     GoogleMap mMap;
 
@@ -54,13 +57,24 @@ public class HttpRequest {
         mMap = Map;
     }
 
+    public HttpRequest(Context ctx)
+    {
+        context = ctx;
+    }
+
+    public String getToken()
+    {
+        return token;
+    }
+
     public void Get(final String url, final Map<String, String> headers, Response.Listener<String> listener)
     {
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, listener, new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
-            System.out.println("ERROR ON GET REQUEST URL = " + url);
+            //System.out.println("ERROR ON GET REQUEST URL = " + url);
+            Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show();
         }
     })
         {
@@ -118,7 +132,7 @@ public class HttpRequest {
         Post(local_url + "users", user, header);
     }
 
-    public void GetToken(final String username, final String password)
+    public void login(final String username, final String password)
     {
         //FAIRE REQUETTE SYNCHRONOUS https://stackoverflow.com/questions/16904741/can-i-do-a-synchronous-request-with-volley
         //OU APPELER UN FONCTION POUR RECUPE LE TOKEN DANS ONRESPONSE
@@ -134,7 +148,50 @@ public class HttpRequest {
             @Override
             public void onResponse(String response) {
                 System.out.println("RESP = " + response);
-                request_response = response;
+                token = response;
+            }
+        };
+
+        Get(url, headers, listener);
+    }
+
+    public void GetToken(final String username, final String password)
+    {
+        //FAIRE REQUETTE SYNCHRONOUS https://stackoverflow.com/questions/16904741/can-i-do-a-synchronous-request-with-volley
+        //OU APPELER UN FONCTION POUR RECUPE LE TOKEN DANS ONRESPONSE
+        String url = local_url + "token";
+
+        Map<String, String> headers = new HashMap<String, String>();
+        String credentials = username + ":" + password;
+        String auth = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+        headers.put("Content-Type", "application/json");
+        headers.put("Authorization", auth);
+
+        Response.Listener listener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //System.out.println("RESP = " + response);
+                token = response;
+                JSONObject jObject = null;
+                try {
+                    jObject = new JSONObject(token);
+                    String result = jObject.getString("token");
+                    Intent intent = new Intent(context, MapsActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("token", result);
+                    intent.putExtras(bundle);
+                    context.startActivity(intent);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(context, "FAILED to get token, check username or password", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "FAILED to get token, check username or password", Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -205,7 +262,7 @@ public class HttpRequest {
 
                 double longitude = Double.parseDouble(longs);
                 double lat = Double.parseDouble(lats);
-                System.out.println("ID POINT = " + jsonobject.getString("id"));
+                //System.out.println("ID POINT = " + jsonobject.getString("id"));
                 LatLng pos = new LatLng(lat,longitude);
                 MarkerOptions marker = new MarkerOptions().position(pos).title(name);
                 mMap.addMarker(marker);

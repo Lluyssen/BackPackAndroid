@@ -29,6 +29,7 @@
         android:orientation="vertical">
 
         <EditText
+            android:id="@+id/UsernameInputLogin"
             android:drawablePadding="20dp"
             android:drawableLeft="@drawable/ic_person_black"
             android:layout_width="350dp"
@@ -36,6 +37,7 @@
             android:hint="USERNAME"/>
 
         <EditText
+            android:id="@+id/PasswordInputLogin"
             android:drawablePadding="20dp"
             android:drawableLeft="@drawable/ic_lock_black_24dp"
             android:layout_width="350dp"

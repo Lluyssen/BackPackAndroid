@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -66,15 +67,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<String>    photoList;
     private static int SELECTED_PICTURE = 1;
     private HttpRequest httpRequest;
-    String token = "eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTQ1NTEwMiwiZXhwIjoxMTUyMTQ1NTEwMX0.eyJpZCI6Mn0.qT19ib8C6x1Di-gUKoy6PZJTR1kYX6IOZeYzgVGF19g";
+    String token = ""; //"eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTQ1NTEwMiwiZXhwIjoxMTUyMTQ1NTEwMX0.eyJpZCI6Mn0.qT19ib8C6x1Di-gUKoy6PZJTR1kYX6IOZeYzgVGF19g";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_maps);
         markerList = new ArrayList<Point>();
         photoList = new ArrayList<String>();
-        //HttpRequest httpRequest = new HttpRequest(MapsActivity.this);
+
+        Bundle b = this.getIntent().getExtras();
+        String value = ""; // or other values
+        if(b != null)
+            value = b.getString("token");
+        else
+            System.out.println("FAIL BUNDLE IS NULL");
+
+        token = value;
+        System.out.println("TOKENNNNNNNNNNNNNNNNNNNNNNNNNNNNNN = " + token);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

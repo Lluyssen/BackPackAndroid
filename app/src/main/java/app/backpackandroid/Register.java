@@ -3,6 +3,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -11,6 +12,7 @@ public class Register extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
 
@@ -19,8 +21,8 @@ public class Register extends Activity {
             @Override
             public void onClick(View v)
             {
-                EditText UserNameInput = (EditText) findViewById(R.id.UsernameInput);
-                EditText PassWordInput = (EditText) findViewById(R.id.PasswordInput);
+                EditText UserNameInput = (EditText) findViewById(R.id.UsernameInputRegister);
+                EditText PassWordInput = (EditText) findViewById(R.id.PasswordInputRegister);
                 EditText PassWordConfirmedInput = (EditText) findViewById(R.id.PasswordConfirmedInput);
                 EditText EmailInput =(EditText) findViewById(R.id.EmailInput);
 
