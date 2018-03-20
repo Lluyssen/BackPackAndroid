@@ -45,15 +45,17 @@
             android:hint="PASSWORD"
             android:inputType="textPassword"/>
 
-        <Button
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
             android:id="@+id/LoginBtn"
-            android:drawableEnd="@drawable/ic_play_arrow_black_24dp"
             android:background="@drawable/buttonstyle_login"
             android:textColor="@color/colorWhite"
             android:text="Login In"
             android:layout_marginTop="40dp"
             android:layout_width="150dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:spinning_bar_color="#FFF"
+            app:spinning_bar_padding="6dp"
+            app:spinning_bar_width="4dp"/>
 
         <TextView
             android:drawablePadding="20dp"

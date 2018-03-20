@@ -3,6 +3,10 @@ package app.backpackandroid;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
@@ -35,6 +39,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+
 import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
 /**
@@ -44,7 +50,7 @@ import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 public class HttpRequest {
 
     //private String local_url = "http://10.0.2.2:5000/";
-    private String ip = "10.41.176.182";
+    private String ip = "192.168.1.80";
     private String local_url = "http://" + ip + ":5000/";
     //private String local_url = "https://backpack-api-epitech.herokuapp.com/";
     private Context context;
@@ -156,7 +162,7 @@ public class HttpRequest {
         Get(url, headers, listener);
     }
 
-    public void GetToken(final String username, final String password)
+    public void GetToken(final String username, final String password, final CircularProgressButton button)
     {
         //FAIRE REQUETTE SYNCHRONOUS https://stackoverflow.com/questions/16904741/can-i-do-a-synchronous-request-with-volley
         //OU APPELER UN FONCTION POUR RECUPE LE TOKEN DANS ONRESPONSE
@@ -173,6 +179,7 @@ public class HttpRequest {
             public void onResponse(String response) {
                 System.out.println("RESP = " + response);
                 token = response;
+                //button.doneLoadingAnimation(Color.parseColor("#333639"), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_done_white_48dp));
                 //token = "eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTQ2NzU1MCwiZXhwIjoxMTUyMTQ2NzU0OX0.eyJpZCI6Mn0.6ZV9q9D8fpf0MvhD2YqpKvPSKpIRtZSJrLevDZC4tfI";
                 JSONObject jObject = null;
                 try {
@@ -182,7 +189,9 @@ public class HttpRequest {
                     Bundle bundle = new Bundle();
                     bundle.putString("token", result);
                     intent.putExtras(bundle);
+                    button.doneLoadingAnimation(Color.parseColor("#333639"), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_done_white_48dp));
                     context.startActivity(intent);
+                    //button.revertAnimation();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(context, "FAILED to get token, check username or password", Toast.LENGTH_SHORT).show();
@@ -198,6 +207,12 @@ public class HttpRequest {
         };
 
        Get(url, headers, listener);
+        /*try {
+            Thread.sleep(30);
+            //button.revertAnimation();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
     }
 
     public void GetUsers()
