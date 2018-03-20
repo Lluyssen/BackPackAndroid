@@ -1,9 +1,69 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="app.backpackandroid.MapsActivity">
-</fragment>
+    tools:context=".MapsActivity" >
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="app.backpackandroid.MapsActivity"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center|bottom">
+
+        <Button
+            android:id="@+id/PositionBtn"
+            android:gravity="center"
+            android:paddingLeft="28dp"
+            android:drawableStart="@drawable/ic_location_on_white_24dp"
+            android:background="@color/colorGrayB"
+            android:layout_width="77dp"
+            android:layout_height="40dp" />
+
+        <Button
+            android:id="@+id/AccountBtn"
+            android:gravity="center"
+            android:paddingLeft="28dp"
+            android:drawableStart="@drawable/ic_account_box_white_24dp"
+            android:background="@color/colorGrayB"
+            android:layout_width="76dp"
+            android:layout_height="40dp" />
+
+        <Button
+            android:id="@+id/HomeBtn"
+            android:gravity="center"
+            android:paddingLeft="28dp"
+            android:drawableStart="@drawable/ic_home_white_24dp"
+            android:background="@color/colorGrayB"
+            android:layout_width="77dp"
+            android:layout_height="40dp" />
+
+        <Button
+            android:id="@+id/ParametreBtn"
+            android:gravity="center"
+            android:paddingLeft="28dp"
+            android:drawableStart="@drawable/ic_settings_white_24dp"
+            android:background="@color/colorGrayB"
+            android:layout_width="77dp"
+            android:layout_height="40dp" />
+
+        <Button
+            android:id="@+id/MenuBtn"
+            android:gravity="center"
+            android:paddingLeft="28dp"
+            android:drawableStart="@drawable/ic_map_black_24dp"
+            android:background="@color/colorGrayB"
+            android:layout_width="77dp"
+            android:layout_height="40dp" />
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -44,8 +44,9 @@ import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 public class HttpRequest {
 
     //private String local_url = "http://10.0.2.2:5000/";
-    private String ip = "10.41.174.4";
+    private String ip = "10.41.176.182";
     private String local_url = "http://" + ip + ":5000/";
+    //private String local_url = "https://backpack-api-epitech.herokuapp.com/";
     private Context context;
     private String token = new String();
     private String request_response = new String();
@@ -170,8 +171,9 @@ public class HttpRequest {
         Response.Listener listener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //System.out.println("RESP = " + response);
+                System.out.println("RESP = " + response);
                 token = response;
+                //token = "eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTQ2NzU1MCwiZXhwIjoxMTUyMTQ2NzU0OX0.eyJpZCI6Mn0.6ZV9q9D8fpf0MvhD2YqpKvPSKpIRtZSJrLevDZC4tfI";
                 JSONObject jObject = null;
                 try {
                     jObject = new JSONObject(token);

@@ -1,15 +1,19 @@
 package app.backpackandroid;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -135,13 +139,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-
-        Bitmap bitmap;
-        bitmap = getImage("http://jbinformatique.com/2017/12/09/developpement-android-zoom-imageview-java");
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        }
 
         LatLng tek = new LatLng(48.81552199999999, 2.362973000000011);
         mMap.addMarker(new MarkerOptions().position(tek).title("Tek").snippet("tetetetetetetetetetetet")/*.icon(BitmapDescriptorFactory.fromBitmap(bitmap))*/);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(tek));
+
+        Button button = (Button) findViewById(R.id.PositionBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                GPStracker g = new GPStracker(getApplicationContext());
+                Location l = g.getLocation();
+                if (l != null) {
+                    double lat = l.getAltitude();
+                    double lon = l.getLongitude();
+                    Toast.makeText(getApplicationContext(), "LAT : " + lat + " \n LON : " + lon, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     public void InfoDialog(Marker marker) {
