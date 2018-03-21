@@ -50,18 +50,23 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 class Point
 {
-    MarkerOptions   marker;
+    Marker   marker;
+    List<Bitmap>    photoList;
+    String          id;
 
-    public Point(MarkerOptions mkr)
+    public Point(Marker mkr, List<Bitmap> photos)
     {
+        id = mkr.getId(); //Remplacer par id
         this.marker = mkr;
+        photoList = photos;
     }
 
-    public void add(MarkerOptions mkr)
+    public void add(Marker mkr)
     {
         this.marker = mkr;
     }
@@ -70,12 +75,16 @@ class Point
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap               mMap;
-    private List<Point>    markerList;
-    private List<String>    photoList;
+    private HashMap<String,Point>   markerList;
+    private List<Bitmap>    photoListTmp;
     private static int SELECTED_PICTURE = 1;
     private HttpRequest httpRequest;
     private Dialog dialog;
+    private View dialogView;
     String token = ""; //"eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTQ1NTEwMiwiZXhwIjoxMTUyMTQ1NTEwMX0.eyJpZCI6Mn0.qT19ib8C6x1Di-gUKoy6PZJTR1kYX6IOZeYzgVGF19g";
+
+    LinearLayout layoutPrevPhoto;
+    LinearLayout.LayoutParams layoutPrevPhotoParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +93,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         setContentView(R.layout.activity_maps);
         dialog = new Dialog(MapsActivity.this);
-        markerList = new ArrayList<Point>();
-        photoList = new ArrayList<String>();
+        markerList = new HashMap<String,Point>();
+        photoListTmp = new ArrayList<Bitmap>();
 
         Bundle b = this.getIntent().getExtras();
         String value = ""; // or other values
@@ -175,11 +184,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         dialog.requestWindowFeature(getWindow().FEATURE_NO_TITLE);
         View view = getLayoutInflater().inflate(R.layout.infowindow, null);
         Button addButton = (Button) view.findViewById(R.id.closeBtn);
-        ImageView addImage = view.findViewById(R.id.DisplayImage);
-        Drawable new_image= getResources().getDrawable(R.drawable.plage);
-        addImage.setBackgroundDrawable(new_image);
+        //ImageView addImage = view.findViewById(R.id.DisplayImage);
+        Drawable new_image = getResources().getDrawable(R.drawable.plage);
+        //addImage.setBackgroundDrawable(new_image);
         TextView addText = view.findViewById(R.id.Textinfo);
         addText.setText(marker.getTitle() + "\n" + marker.getSnippet());
+
+        layoutPrevPhoto = (LinearLayout) view.findViewById(R.id.picturePrevOfPoint);
+        layoutPrevPhotoParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        System.out.println("MARKER ID = " + marker.getId());
+
+        //ON PEUX VOIR QUE LES PHOTOS DES POINTS QU'ON VIENT D'AJOUTER
+        if (!markerList.isEmpty())
+        {
+            Point point = markerList.get(marker.getId());
+            if (point != null && !point.photoList.isEmpty())
+            {
+                for (int i = 0; i != point.photoList.size(); i++) {
+                    ImageView imageView = new ImageView(MapsActivity.this);
+
+                    imageView.setImageBitmap(point.photoList.get(i));
+                    imageView.setLayoutParams(layoutPrevPhotoParams);
+
+                    layoutPrevPhoto.addView(imageView);
+                }
+            }
+            else
+                System.out.println("NO PHOTO FOR THIS POINT");
+        }
+
         dialog.setContentView(view);
         dialog.setCancelable(true);
         dialog.show();
@@ -197,7 +231,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Button addButton = (Button) view.findViewById(R.id.addBtn);
         ImageButton addPhoto = (ImageButton) view.findViewById(R.id.addPhoto);
         final EditText editTextName = (EditText) view.findViewById(R.id.editName);
+        photoListTmp.clear();
+        layoutPrevPhoto = (LinearLayout) view.findViewById(R.id.picturePrev);
+        layoutPrevPhotoParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
+        dialogView = view;
         dialog.setContentView(view);
         dialog.setTitle("Add point");
         dialog.setCancelable(true);
@@ -210,15 +248,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (!editTextName.getText().toString().isEmpty()) {
                     newMarker.title(editTextName.getText().toString());
                     Toast.makeText(MapsActivity.this, "New point added !", Toast.LENGTH_SHORT).show();
-                    mMap.addMarker(newMarker);
-                    markerList.add(new Point(newMarker));
+                    Marker marker = mMap.addMarker(newMarker);
+                    markerList.put(marker.getId(), new Point(marker, new ArrayList<Bitmap>(photoListTmp)));
                     dialog.dismiss();
                     System.out.println("Lat = " + newMarker.getPosition().latitude);
                     System.out.println("Long = " + newMarker.getPosition().longitude);
 
                     httpRequest.PostPois(editTextName.getText().toString(), "no desc", newMarker.getPosition().latitude, newMarker.getPosition().longitude, token);
-                    //HttpRequest httpRequest = new HttpRequest(MapsActivity.this);
-                    //httpRequest.GetToken("oui", "oui");
                 }
             }
         });
@@ -239,41 +275,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SELECTED_PICTURE && resultCode == RESULT_OK)
         {
-
-            /*
-            //setContentView(R.layout.prev_photos);
-            LinearLayout layout = (LinearLayout) findViewById(R.id.picturePrev);
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-
-            for (int i = 0; i < 4; i++) {
-                layoutParams.setMargins(20, 20, 20, 20);
-                layoutParams.gravity = Gravity.CENTER;
-                ImageView imageView = new ImageView(MapsActivity.this);
-
-                Uri selectedImage = data.getData();
-                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                cursor.moveToFirst();
-
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                String picturePath = cursor.getString(columnIndex);
-                cursor.close();
-
-//                imageView.setImageResource(R.drawable.image);
-                imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-                imageView.setLayoutParams(layoutParams);
-
-                layout.addView(imageView);
-
-            }*/
-
             //setContentView(R.layout.add_point);
 
             //View view = dialog.getCurrentFocus();
-            View view = LayoutInflater.from(dialog.getContext()).inflate(R.layout.add_point, null);
-            dialog.setContentView(view);
+            //View view = LayoutInflater.from(dialog.getContext()).inflate(R.layout.add_point, null);
+            //dialog.setContentView(view);
             //View view = getLayoutInflater().inflate(R.layout.add_point, null);
 
             Uri selectedImage = data.getData();
@@ -288,29 +294,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
             //------------------------------
-            LinearLayout layout = (LinearLayout) view.findViewById(R.id.picturePrev);
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutPrevPhotoParams.gravity = Gravity.CENTER;
+            ImageView imageView = new ImageView(MapsActivity.this);
 
+            Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+            imageView.setImageBitmap(bitmap);
+            imageView.setLayoutParams(layoutPrevPhotoParams);
 
-            for (int i = 0; i < 4; i++) {
-                //layoutParams.setMargins(20, 20, 20, 20);
-                layoutParams.gravity = Gravity.CENTER;
-                ImageView imageView = new ImageView(MapsActivity.this);
+            photoListTmp.add(bitmap);
 
-                imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-                imageView.setLayoutParams(layoutParams);
-
-                layout.addView(imageView);
-
-            }
-            //------------------------------
-
-            photoList.add(picturePath); //ca ajoute trop tard
+            layoutPrevPhoto.addView(imageView);
+            //-----------------------------
 
             //ImageView imageView = (ImageView) findViewById(R.id.imageUploadPrev);
 
             //ImageView imageView = (ImageView) view.findViewById(R.id.imageUploadPrev);
             //imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+            //Redefine button of dialog
+            /*ImageButton addPhoto = (ImageButton) dialogView.findViewById(R.id.addPhoto);
+            addPhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(
+                            Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                    startActivityForResult(i, SELECTED_PICTURE);
+                }
+            });*/
+            //-------------------------------------------
             dialog.show();
         }
     }

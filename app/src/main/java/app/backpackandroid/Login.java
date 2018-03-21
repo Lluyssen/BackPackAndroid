@@ -19,8 +19,8 @@ public class Login extends Activity {
         setContentView(R.layout.login);
         httpRequest = new HttpRequest(Login.this);
 
-        //------------TEST---
-        httpRequest.GetToken("user1", "user1");
+        //------------TEST to skip login---
+        //httpRequest.GetToken("user1", "user1");
         //-------------------
 
         Button LoginBtn = findViewById(R.id.LoginBtn);

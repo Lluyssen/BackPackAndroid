@@ -44,7 +44,7 @@ import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 public class HttpRequest {
 
     //private String local_url = "http://10.0.2.2:5000/";
-    private String ip = "10.102.189.4";
+    private String ip = "192.168.1.45";
     private String local_url = "http://" + ip + ":5000/";
     //private String local_url = "https://backpack-api-epitech.herokuapp.com/";
     private Context context;
