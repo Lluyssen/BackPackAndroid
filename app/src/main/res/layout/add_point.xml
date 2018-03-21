@@ -25,7 +25,7 @@
 
     <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
         android:id="@+id/scrollViewPicture"
         android:padding="0dp"
         android:layout_margin="0dp"
@@ -42,12 +42,21 @@
 
     </HorizontalScrollView>
 
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/typeSpinner"
+        android:layout_below="@+id/scrollViewPicture"
+        android:padding="10dp"
+        android:layout_margin="5dp"
+        />
+
     <Button
         android:id="@+id/addBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add"
-        android:layout_below="@id/scrollViewPicture"
+        android:layout_below="@+id/typeSpinner"
         android:layout_alignParentRight="true"/>
 
 </RelativeLayout>

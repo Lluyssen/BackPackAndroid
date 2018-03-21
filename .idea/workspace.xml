@@ -20,9 +20,8 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/app/backpackandroid/HttpRequest.java" afterPath="$PROJECT_DIR$/app/src/main/java/app/backpackandroid/HttpRequest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/app/backpackandroid/Login.java" afterPath="$PROJECT_DIR$/app/src/main/java/app/backpackandroid/Login.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/app/backpackandroid/MapsActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/app/backpackandroid/MapsActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/infowindow.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/infowindow.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/add_point.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/add_point.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -46,14 +45,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Login.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Login.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/app/backpackandroid/Login.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="29" column="36" lean-forward="true" selection-start-line="29" selection-start-column="36" selection-end-line="29" selection-end-column="36" />
+            <state relative-caret-position="464">
+              <caret line="36" column="13" lean-forward="false" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
               <folding>
                 <element signature="e#979#1375#0" expanded="true" />
-                <element signature="e#1374#1375#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -72,22 +70,22 @@
       <file leaf-file-name="HttpRequest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/app/backpackandroid/HttpRequest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1120">
-              <caret line="202" column="5" lean-forward="false" selection-start-line="202" selection-start-column="5" selection-end-line="202" selection-end-column="5" />
+            <state relative-caret-position="193">
+              <caret line="254" column="41" lean-forward="false" selection-start-line="254" selection-start-column="41" selection-end-line="254" selection-end-column="41" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MapsActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MapsActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/app/backpackandroid/MapsActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="369">
-              <caret line="252" column="37" lean-forward="false" selection-start-line="252" selection-start-column="37" selection-end-line="252" selection-end-column="37" />
+            <state relative-caret-position="325">
+              <caret line="256" column="87" lean-forward="true" selection-start-line="256" selection-start-column="87" selection-end-line="256" selection-end-column="87" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#5547#5731#0" expanded="true" />
-                <element signature="e#5730#5731#0" expanded="true" />
+                <element signature="e#5646#5830#0" expanded="true" />
+                <element signature="e#5829#5830#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -138,8 +136,8 @@
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="533">
-              <caret line="38" column="26" lean-forward="false" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="26" />
+            <state relative-caret-position="384">
+              <caret line="50" column="35" lean-forward="false" selection-start-line="50" selection-start-column="35" selection-end-line="50" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -1987,11 +1985,11 @@
         <option value="$PROJECT_DIR$/app/src/main/java/app/backpackandroid/Register.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_maps.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/prev_photos.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/add_point.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/infowindow.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/app/backpackandroid/Login.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/add_point.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/app/backpackandroid/HttpRequest.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/app/backpackandroid/MapsActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/app/backpackandroid/Login.java" />
       </list>
     </option>
   </component>
@@ -2336,7 +2334,7 @@
       <option name="ACTIVITY_CLASS" value="app.backpackandroid.Login" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521668504589" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521670467107" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
@@ -2409,7 +2407,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521668504589" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521670467107" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2457,7 +2455,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521668504589" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521670467107" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2640,7 +2638,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521668504590" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521670467108" />
       </method>
     </configuration>
     <configuration default="false" name="MapsActivity" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
@@ -2689,7 +2687,7 @@
       <option name="ACTIVITY_CLASS" value="app.backpackandroid.MapsActivity" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521668504590" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1521670467108" />
       </method>
     </configuration>
     <list size="3">
@@ -2809,7 +2807,14 @@
       <option name="project" value="LOCAL" />
       <updated>1521645578899</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Can add multiple photos to point (but only local, and only can see picture of point fresh added)&#10;Photo can be viewed on when click to info window &#10;Photos preview is not horizontal scroll list">
+      <created>1521668735271</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1521668735271</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2898,7 +2903,8 @@
     <MESSAGE value="Add Login and Register page&#10;Add info dialog on click on point" />
     <MESSAGE value="Login working with API&#10;Get auto du Token from API" />
     <MESSAGE value="Can add 1 photo and prev (but hve to redeclare button etc... of dialog)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Can add 1 photo and prev (but hve to redeclare button etc... of dialog)" />
+    <MESSAGE value="Can add multiple photos to point (but only local, and only can see picture of point fresh added)&#10;Photo can be viewed on when click to info window &#10;Photos preview is not horizontal scroll list" />
+    <option name="LAST_COMMIT_MESSAGE" value="Can add multiple photos to point (but only local, and only can see picture of point fresh added)&#10;Photo can be viewed on when click to info window &#10;Photos preview is not horizontal scroll list" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3215,17 +3221,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/add_point.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="533">
-          <caret line="38" column="26" lean-forward="false" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/Android/Sdk/platforms/android-26/android.jar!/java/util/List.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="202">
@@ -3245,33 +3240,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/app/backpackandroid/MapsActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/app/backpackandroid/Login.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="252" column="37" lean-forward="false" selection-start-line="252" selection-start-column="37" selection-end-line="252" selection-end-column="37" />
+        <state relative-caret-position="464">
+          <caret line="36" column="13" lean-forward="false" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#5547#5731#0" expanded="true" />
-            <element signature="e#5730#5731#0" expanded="true" />
+            <element signature="e#979#1375#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/add_point.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="50" column="35" lean-forward="false" selection-start-line="50" selection-start-column="35" selection-end-line="50" selection-end-column="35" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/app/backpackandroid/HttpRequest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1120">
-          <caret line="202" column="5" lean-forward="false" selection-start-line="202" selection-start-column="5" selection-end-line="202" selection-end-column="5" />
+        <state relative-caret-position="193">
+          <caret line="254" column="41" lean-forward="false" selection-start-line="254" selection-start-column="41" selection-end-line="254" selection-end-column="41" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/app/backpackandroid/Login.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/app/backpackandroid/MapsActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="29" column="36" lean-forward="true" selection-start-line="29" selection-start-column="36" selection-end-line="29" selection-end-column="36" />
+        <state relative-caret-position="325">
+          <caret line="256" column="87" lean-forward="true" selection-start-line="256" selection-start-column="87" selection-end-line="256" selection-end-column="87" />
           <folding>
-            <element signature="e#979#1375#0" expanded="true" />
-            <element signature="e#1374#1375#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#5646#5830#0" expanded="true" />
+            <element signature="e#5829#5830#0" expanded="true" />
           </folding>
         </state>
       </provider>

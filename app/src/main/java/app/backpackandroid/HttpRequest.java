@@ -261,12 +261,13 @@ public class HttpRequest {
                 String lats = jsonobject.getString("lat");
                 String longs = jsonobject.getString("long");
                 String createur = jsonobject.getString("userName");
+                String type = jsonobject.getString("type");
 
                 double longitude = Double.parseDouble(longs);
                 double lat = Double.parseDouble(lats);
                 //System.out.println("ID POINT = " + jsonobject.getString("id"));
                 LatLng pos = new LatLng(lat,longitude);
-                MarkerOptions marker = new MarkerOptions().position(pos).title(name).snippet("Created by: " + createur);
+                MarkerOptions marker = new MarkerOptions().position(pos).title(name).snippet("Created by: " + createur + "\nType: " + type);
                 mMap.addMarker(marker);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -295,13 +296,14 @@ public class HttpRequest {
         Get(url, headers, listener);
     }
 
-    public void PostPois(String name, String desc, double latitude, double longitude, String token)
+    public void PostPois(String name, String desc, double latitude, double longitude, String type, String token)
     {
         Map<String,String> point = new HashMap<String, String>();
         point.put("name", name);
         point.put("description", desc);
         point.put("lat", Double.toString(latitude));
         point.put("long", Double.toString(longitude));
+        point.put("type", type);
 
         System.out.println("POST Lat = " + latitude);
         System.out.println("POST Long = " + longitude);

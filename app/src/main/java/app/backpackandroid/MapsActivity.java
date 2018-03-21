@@ -19,12 +19,15 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -232,8 +235,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ImageButton addPhoto = (ImageButton) view.findViewById(R.id.addPhoto);
         final EditText editTextName = (EditText) view.findViewById(R.id.editName);
         photoListTmp.clear();
+        //preview photo
         layoutPrevPhoto = (LinearLayout) view.findViewById(R.id.picturePrev);
         layoutPrevPhotoParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        //liste deroulante type
+        final Spinner spinner = (Spinner) view.findViewById(R.id.typeSpinner);
+        //Création d'une liste d'élément à mettre dans le Spinner(pour l'exemple)
+        List typeList = new ArrayList();
+        typeList.add("Point de vue");
+        typeList.add("Point d'eau");
+        typeList.add("Point de campement");
+        typeList.add("Autre");
+
+        ArrayAdapter adapter = new ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_item,
+                typeList
+        );
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        //-------------------------------
 
         dialogView = view;
         dialog.setContentView(view);
@@ -246,7 +269,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 if (!editTextName.getText().toString().isEmpty()) {
-                    newMarker.title(editTextName.getText().toString());
+                    newMarker.title(editTextName.getText().toString()).snippet("Type: " + spinner.getSelectedItem().toString());
                     Toast.makeText(MapsActivity.this, "New point added !", Toast.LENGTH_SHORT).show();
                     Marker marker = mMap.addMarker(newMarker);
                     markerList.put(marker.getId(), new Point(marker, new ArrayList<Bitmap>(photoListTmp)));
@@ -254,7 +277,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     System.out.println("Lat = " + newMarker.getPosition().latitude);
                     System.out.println("Long = " + newMarker.getPosition().longitude);
 
-                    httpRequest.PostPois(editTextName.getText().toString(), "no desc", newMarker.getPosition().latitude, newMarker.getPosition().longitude, token);
+                    httpRequest.PostPois(editTextName.getText().toString(), "no desc", newMarker.getPosition().latitude, newMarker.getPosition().longitude, spinner.getSelectedItem().toString(), token);
                 }
             }
         });
