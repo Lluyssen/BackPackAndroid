@@ -14,13 +14,29 @@ public class TutoPage extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tuto_page);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         Button LoginBtn = findViewById(R.id.Tuto1Btn);
         LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(TutoPage.this, Tuto1.class));
+            }
+        });
+
+        Button LoginBtn1 = findViewById(R.id.Tuto2Btn);
+        LoginBtn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(TutoPage.this, Tuto2.class));
+            }
+        });
+
+        Button LoginBtn2 = findViewById(R.id.Tuto3Btn);
+        LoginBtn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(TutoPage.this, Tuto3.class));
             }
         });
     }

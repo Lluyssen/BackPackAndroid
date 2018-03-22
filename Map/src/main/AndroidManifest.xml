@@ -25,14 +25,21 @@
         <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".TutoPage"></activity>
-
-        <activity android:name=".Register"></activity>
-        <activity android:name=".Tuto1" android:label="@string/title_activity_tuto1"></activity>
+        <activity android:name=".TutoPage" />
+        <activity android:name=".Register" />
+        <activity
+            android:name=".Tuto1"
+            android:label="@string/title_activity_tuto1" />
+        <activity
+            android:name=".Tuto2"
+            android:label="@string/title_activity_tuto2" />
+        <activity
+            android:name=".Tuto3"
+            android:label="@string/title_activity_tuto3"></activity>
     </application>
 
 </manifest>

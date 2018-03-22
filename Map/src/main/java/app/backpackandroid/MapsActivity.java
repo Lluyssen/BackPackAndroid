@@ -235,8 +235,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 for (HashMap<String, String> point : path) {
                     double lat = Double.parseDouble(point.get("lat"));
                     double lon = Double.parseDouble(point.get("lon"));
-                    https:
-//maps.googleapis.com/maps/api/directions/
+                    https://maps.googleapis.com/maps/api/directions/
                     points.add(new LatLng(lat, lon));
                 }
                 polylineOptions.addAll(points);

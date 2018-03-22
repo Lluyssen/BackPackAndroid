@@ -33,5 +33,7 @@
     <string name="submit">SUBMIT</string>
     <string name="back">BACK</string>
     <string name="title_activity_tuto1">Tuto1</string>
+    <string name="title_activity_tuto2">Tuto2</string>
+    <string name="title_activity_tuto3">Tuto3</string>
 
 </resources>

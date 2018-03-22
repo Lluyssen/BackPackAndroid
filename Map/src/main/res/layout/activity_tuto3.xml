@@ -15,53 +15,53 @@
             android:gravity="center">
 
             <TextView
-                android:textColor="@color/colorRed"
+                android:textColor="@color/colorGreen"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:background="@color/colorGrayB"
-                android:text="COMMENT FAIRE UN FEU"
+                android:text="COMMENT FAIRE UN PIEGE A LAPIN"
                 android:gravity="center"
                 android:textSize="25dp"/>
 
-        <ImageView
-            android:id="@+id/img"
-            android:adjustViewBounds="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/fire1" />
+            <ImageView
+                android:id="@+id/img"
+                android:adjustViewBounds="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/lapin3" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:background="@color/colorGrayB"
                 android:textColor="@color/colorWhite"
-                android:text="Pour ce tutoriel vous aurez besoin de copeaux de bois, de feuilles, de carton. Plus vous aurez de combustibles, plus votre feu durera dans le temps."/>
+                android:text="Pour ce tutoriel vous aurez besoin de 3 branches de bois, un fil de fer et d'un peu de patience"/>
 
             <ImageView
                 android:adjustViewBounds="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/fire3"/>
+                android:src="@drawable/lapin1"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:background="@color/colorGrayB"
                 android:textColor="@color/colorWhite"
-                android:text="Mettez vos feuilles à la base. Mettez le bois en forme de tippie, puis disposez le carton au centre."/>
+                android:text="Avec le fil de fer, créez un arc de cercle, il servira de prise pour attraper le lapin"/>
 
             <ImageView
                 android:adjustViewBounds="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/fire5"/>
+                android:src="@drawable/lapin2"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:background="@color/colorGrayB"
                 android:textColor="@color/colorWhite"
-                android:text="Il ne vous reste plus qu'à allumer la base afin de faire brûler les combustibles"/>
+                android:text="Enfoncez dans le sol deux bâtons, et placez-en un dernier au dessus afin de créer un pont de bois, il doit être résistant. Il ne vous reste plus qu'à assembler les deux modules et attendre."/>
 
         </LinearLayout>
 
