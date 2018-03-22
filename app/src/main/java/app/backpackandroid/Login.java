@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class Login extends Activity {
 
@@ -18,6 +19,10 @@ public class Login extends Activity {
         setContentView(R.layout.login);
         httpRequest = new HttpRequest(Login.this);
 
+        //------------TEST to skip login---
+        //httpRequest.GetToken("user1", "user1");
+        //-------------------
+
         Button LoginBtn = findViewById(R.id.LoginBtn);
         final EditText userEdit = (EditText) findViewById(R.id.UsernameInputLogin);
         final EditText passwdEdit = (EditText) findViewById(R.id.PasswordInputLogin);
@@ -27,6 +32,7 @@ public class Login extends Activity {
             public void onClick(View v) {
                 String user = userEdit.getText().toString();
                 String password = passwdEdit.getText().toString();
+                Toast.makeText(getApplicationContext(), "Loading...", Toast.LENGTH_SHORT).show();
                 httpRequest.GetToken(user, password);
             }
         });

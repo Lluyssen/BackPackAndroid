@@ -44,7 +44,7 @@ import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 public class HttpRequest {
 
     //private String local_url = "http://10.0.2.2:5000/";
-    private String ip = "10.41.176.182";
+    private String ip = "192.168.1.45";
     private String local_url = "http://" + ip + ":5000/";
     //private String local_url = "https://backpack-api-epitech.herokuapp.com/";
     private Context context;
@@ -173,7 +173,6 @@ public class HttpRequest {
             public void onResponse(String response) {
                 System.out.println("RESP = " + response);
                 token = response;
-                //token = "eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTQ2NzU1MCwiZXhwIjoxMTUyMTQ2NzU0OX0.eyJpZCI6Mn0.6ZV9q9D8fpf0MvhD2YqpKvPSKpIRtZSJrLevDZC4tfI";
                 JSONObject jObject = null;
                 try {
                     jObject = new JSONObject(token);
@@ -261,12 +260,14 @@ public class HttpRequest {
                 String name = jsonobject.getString("name");
                 String lats = jsonobject.getString("lat");
                 String longs = jsonobject.getString("long");
+                String createur = jsonobject.getString("userName");
+                String type = jsonobject.getString("type");
 
                 double longitude = Double.parseDouble(longs);
                 double lat = Double.parseDouble(lats);
                 //System.out.println("ID POINT = " + jsonobject.getString("id"));
                 LatLng pos = new LatLng(lat,longitude);
-                MarkerOptions marker = new MarkerOptions().position(pos).title(name);
+                MarkerOptions marker = new MarkerOptions().position(pos).title(name).snippet("Created by: " + createur + "\nType: " + type);
                 mMap.addMarker(marker);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -295,13 +296,14 @@ public class HttpRequest {
         Get(url, headers, listener);
     }
 
-    public void PostPois(String name, String desc, double latitude, double longitude, String token)
+    public void PostPois(String name, String desc, double latitude, double longitude, String type, String token)
     {
         Map<String,String> point = new HashMap<String, String>();
         point.put("name", name);
         point.put("description", desc);
         point.put("lat", Double.toString(latitude));
         point.put("long", Double.toString(longitude));
+        point.put("type", type);
 
         System.out.println("POST Lat = " + latitude);
         System.out.println("POST Long = " + longitude);
