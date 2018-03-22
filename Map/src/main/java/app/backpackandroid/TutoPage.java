@@ -12,9 +12,9 @@ public class TutoPage extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tuto_page);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         Button LoginBtn = findViewById(R.id.Tuto1Btn);
         LoginBtn.setOnClickListener(new View.OnClickListener() {

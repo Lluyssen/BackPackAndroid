@@ -127,7 +127,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "TUTO PAGE", Toast.LENGTH_LONG).show();
                 startActivity(new Intent(MapsActivity.this, TutoPage.class));
             }
         });
