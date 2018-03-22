@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorGrayB"
+    android:orientation="vertical">
+
+    <Button
+        android:paddingLeft="30dp"
+        android:textSize="15dp"
+        android:textColor="@color/colorRed"
+        android:drawableStart="@drawable/feu"
+        android:id="@+id/Tuto1Btn"
+        android:text="Tutoriel Création d'un feu"
+        android:layout_width="match_parent"
+        android:layout_height="70dp" />
+
+    <Button
+        android:id="@+id/Tuto2Btn"
+        android:paddingLeft="30dp"
+        android:textSize="15dp"
+        android:drawableStart="@drawable/abris"
+        android:textColor="@color/colorBrown"
+        android:text="Tutoriel Création d'un abris"
+        android:layout_width="match_parent"
+        android:layout_height="70dp" />
+
+    <Button
+        android:drawableStart="@drawable/piege"
+        android:id="@+id/Tuto3Btn"
+        android:textColor="@color/colorGreen"
+        android:textSize="15dp"
+        android:paddingLeft="30dp"
+        android:text="Tutoriel Création d'un piége"
+        android:layout_width="match_parent"
+        android:layout_height="70dp" />
+
+</LinearLayout>

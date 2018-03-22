@@ -22,7 +22,6 @@
         <activity android:name=".MapsActivity">
             android:label="@string/title_activity_maps">
         </activity>
-
         <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,10 +29,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Register">
+        <activity android:name=".TutoPage"></activity>
 
-        </activity>
-
+        <activity android:name=".Register"></activity>
+        <activity android:name=".Tuto1" android:label="@string/title_activity_tuto1"></activity>
     </application>
 
 </manifest>

@@ -29,13 +29,13 @@
             android:layout_height="40dp" />
 
         <Button
-            android:id="@+id/AccountBtn"
+            android:id="@+id/TutoBtn"
             android:gravity="center"
             android:paddingLeft="28dp"
-            android:drawableStart="@drawable/ic_account_box_white_24dp"
+            android:drawableStart="@drawable/ic_lightbulb_outline_white_24dp"
             android:background="@color/colorGrayB"
             android:layout_width="76dp"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"/>
 
         <Button
             android:id="@+id/HomeBtn"
