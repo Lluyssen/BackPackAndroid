@@ -33,6 +33,9 @@ Windows:
 * Show the info of the interest Point
 * Display Géolocalisation with out internet
 * Connect with the BackPack APi
+* A Filter for the interest Point
+* Tutoral Page with 3 tuto
+* Create a way between 2 interest point
 
 ## Release History
 
