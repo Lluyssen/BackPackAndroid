@@ -23,6 +23,7 @@ public class Login extends Activity {
         //httpRequest.GetToken("user1", "user1");
         //-------------------
 
+        //
         Button LoginBtn = findViewById(R.id.LoginBtn);
         final EditText userEdit = (EditText) findViewById(R.id.UsernameInputLogin);
         final EditText passwdEdit = (EditText) findViewById(R.id.PasswordInputLogin);
