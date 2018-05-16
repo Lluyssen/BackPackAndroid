@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:textColor="@color/colorGreen"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/colorGrayB"
+                android:text="COMMENT FAIRE UN PIEGE A LAPIN"
+                android:gravity="center"
+                android:textSize="25dp"/>
+
+            <ImageView
+                android:id="@+id/img"
+                android:adjustViewBounds="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/lapin3" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/colorGrayB"
+                android:textColor="@color/colorWhite"
+                android:text="Pour ce tutoriel vous aurez besoin de 3 branches de bois, un fil de fer et d'un peu de patience"/>
+
+            <ImageView
+                android:adjustViewBounds="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/lapin1"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/colorGrayB"
+                android:textColor="@color/colorWhite"
+                android:text="Avec le fil de fer, créez un arc de cercle, il servira de prise pour attraper le lapin"/>
+
+            <ImageView
+                android:adjustViewBounds="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/lapin2"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/colorGrayB"
+                android:textColor="@color/colorWhite"
+                android:text="Enfoncez dans le sol deux bâtons, et placez-en un dernier au dessus afin de créer un pont de bois, il doit être résistant. Il ne vous reste plus qu'à assembler les deux modules et attendre."/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

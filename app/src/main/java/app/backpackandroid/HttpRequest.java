@@ -3,8 +3,10 @@ package app.backpackandroid;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Base64;
 import android.widget.Toast;
 
@@ -18,18 +20,26 @@ import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.android.volley.Response;
+import com.github.kittinunf.fuel.Fuel;
+import com.github.kittinunf.fuel.core.FuelError;
+import com.github.kittinunf.fuel.core.Handler;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -51,11 +61,13 @@ public class HttpRequest {
     private String token = new String();
     private String request_response = new String();
     GoogleMap mMap;
+    HashMap<String,Point> markerList;
 
-    public HttpRequest(Context ctx, GoogleMap Map)
+    public HttpRequest(Context ctx, GoogleMap Map, HashMap<String,Point> markerList2)
     {
         context = ctx;
         mMap = Map;
+        markerList = markerList2;
     }
 
     public HttpRequest(Context ctx)
@@ -268,6 +280,17 @@ public class HttpRequest {
                 //System.out.println("ID POINT = " + jsonobject.getString("id"));
                 LatLng pos = new LatLng(lat,longitude);
                 MarkerOptions marker = new MarkerOptions().position(pos).title(name).snippet("Created by: " + createur + "\nType: " + type);
+
+                if (type.contains("vue"))
+                    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                else if (type.contains("eau"))
+                    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+                else if (type.contains("campement"))
+                    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                else if (type.contains("Autre"))
+                    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
+
+                //
                 mMap.addMarker(marker);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -296,21 +319,41 @@ public class HttpRequest {
         Get(url, headers, listener);
     }
 
-    public void PostPois(String name, String desc, double latitude, double longitude, String type, String token)
+    public String getStringImage(Bitmap bitmap)
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
+    }
+
+    public void PostPois(Point newPoint, String name, String type, String token)
     {
         Map<String,String> point = new HashMap<String, String>();
+        if (newPoint.photoList != null && !newPoint.photoList.isEmpty())
+        {
+            point.put("images", getStringImage(newPoint.photoList.get(0)));
+        }
+        else
+            System.out.println("PHOTOS LISTE IS NULL FOR THIS POINT");
         point.put("name", name);
-        point.put("description", desc);
-        point.put("lat", Double.toString(latitude));
-        point.put("long", Double.toString(longitude));
+        point.put("description", newPoint.marker.getSnippet());
+        point.put("lat", Double.toString(newPoint.marker.getPosition().latitude));
+        point.put("long", Double.toString(newPoint.marker.getPosition().longitude));
         point.put("type", type);
 
-        System.out.println("POST Lat = " + latitude);
-        System.out.println("POST Long = " + longitude);
+        System.out.println("POST Lat = " + newPoint.marker.getPosition().latitude);
+        System.out.println("POST Long = " + newPoint.marker.getPosition().longitude);
 
         Map<String, String> header = new HashMap<String, String>();
         header.put("Authorization", "Bearer " + token);
 
+        JSONObject jsonObject = new JSONObject(point);
+        byte[] body = jsonObject.toString().getBytes();
+
+        //Fuel.post(local_url + "pois").body(body).header(header);
         Post(local_url + "pois", point, header);
     }
 }
+

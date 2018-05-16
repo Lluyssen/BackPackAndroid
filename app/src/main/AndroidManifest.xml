@@ -74,6 +74,18 @@
 
         </activity>
 
+        <activity android:name=".TutoPage" />
+        <activity
+            android:name=".Tuto1"
+            android:label="Tuto1" />
+        <activity
+            android:name=".Tuto2"
+            android:label="Tuto2" />
+        <activity
+            android:name=".Tuto3"
+            android:label="Tuto3">
+        </activity>
+
     </application>
 
 </manifest>

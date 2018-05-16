@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:textColor="@color/colorRed"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/colorGrayB"
+                android:text="COMMENT FAIRE UN FEU"
+                android:gravity="center"
+                android:textSize="25dp"/>
+
+        <ImageView
+            android:id="@+id/img"
+            android:adjustViewBounds="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fire1" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/colorGrayB"
+                android:textColor="@color/colorWhite"
+                android:text="Pour ce tutoriel vous aurez besoin de copeaux de bois, de feuilles, de carton. Plus vous aurez de combustibles, plus votre feu durera dans le temps."/>
+
+            <ImageView
+                android:adjustViewBounds="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/fire3"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/colorGrayB"
+                android:textColor="@color/colorWhite"
+                android:text="Mettez vos feuilles à la base. Mettez le bois en forme de tippie, puis disposez le carton au centre."/>
+
+            <ImageView
+                android:adjustViewBounds="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/fire5"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/colorGrayB"
+                android:textColor="@color/colorWhite"
+                android:text="Il ne vous reste plus qu'à allumer la base afin de faire brûler les combustibles"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

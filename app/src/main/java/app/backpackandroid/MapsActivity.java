@@ -1,6 +1,7 @@
 package app.backpackandroid;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,10 +9,13 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -45,11 +49,19 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
@@ -84,7 +96,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private HttpRequest httpRequest;
     private Dialog dialog;
     private View dialogView;
-    String token = ""; //"eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTQ1NTEwMiwiZXhwIjoxMTUyMTQ1NTEwMX0.eyJpZCI6Mn0.qT19ib8C6x1Di-gUKoy6PZJTR1kYX6IOZeYzgVGF19g";
+    String token = "";
+
+    /*TRAJET */
+    private static final int LOCATION_REQUEST = 500;
+    private ArrayList<LatLng> ListPoints;
+    /*TRAJET */
+
+    //----Filtre----
+    private boolean water_point_hide = true; // si cache ou non
+    private boolean camping_point_hide = true; // si cache ou non
+    private boolean view_point_hide = true; // si cache ou non
+    //-------------
 
     LinearLayout layoutPrevPhoto;
     LinearLayout.LayoutParams layoutPrevPhotoParams;
@@ -98,6 +121,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         dialog = new Dialog(MapsActivity.this);
         markerList = new HashMap<String,Point>();
         photoListTmp = new ArrayList<Bitmap>();
+        ListPoints = new ArrayList<LatLng>();
 
         Bundle b = this.getIntent().getExtras();
         String value = ""; // or other values
@@ -128,7 +152,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        httpRequest = new HttpRequest(MapsActivity.this, mMap);
+        httpRequest = new HttpRequest(MapsActivity.this, mMap, markerList);
 
         googleMap.setOnMapLongClickListener(
                 new GoogleMap.OnMapLongClickListener() {
@@ -144,17 +168,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                             }
         );
 
-        //httpRequest.PostUser("newUser", "newUser");
-        //httpRequest.GetToken("oui", "oui");
-        //httpRequest.GetUsers();
-        //httpRequest.PostPois("TESTPOI", "desc test", 65.9999999, 45.9, "eyJhbGciOiJIUzI1NiIsImlhdCI6MTUyMTMyNDU0NCwiZXhwIjoxNTIxMzI1MTQ0fQ.eyJpZCI6Mn0.kS_IP6obDLiF6GksjhdDdkM_ge7kKIT0z3pVq4RpF_s");
-        httpRequest.GetPois(token);
+       httpRequest.GetPois(token);
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
                 InfoDialog(marker);
             }
         });
+
+        /*TRAJET */
+
+        mMap.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
+            @Override
+            public void onInfoWindowLongClick(Marker marker) {
+                if (ListPoints.size() == 2)
+                    ListPoints.clear();
+                ListPoints.add(marker.getPosition());
+                if (ListPoints.size() == 1)
+                    Toast.makeText(getApplicationContext(), "Your travel Start at " + marker.getTitle(), Toast.LENGTH_SHORT).show();
+                if (ListPoints.size() == 2) {
+                    Toast.makeText(getApplicationContext(), "Your travel Ended at " + marker.getTitle(), Toast.LENGTH_SHORT).show();
+                    String url = getRequestUrl(ListPoints.get(0), ListPoints.get(1));
+                    TaskRequestDirection taskRequestDirection = new TaskRequestDirection();
+                    taskRequestDirection.execute(url);
+                }
+            }
+        });
+        /*TRAJET */
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -179,7 +219,147 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });
+
+        Button button1 = findViewById(R.id.TutoBtn);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MapsActivity.this, TutoPage.class));
+            }
+        });
+
+        /*TRAJET */
+
+
+        final Button waterfilter_button = (Button) findViewById(R.id.WaterBtn);
+        WaterFilterButton(waterfilter_button);
+
+        final Button viewfilter_button = (Button) findViewById(R.id.ViewBtn);
+        ViewFilterButton(viewfilter_button);
+
+        final Button campingfilter_button = (Button) findViewById(R.id.CampingBtn);
+        CampingFilterButton(campingfilter_button);
+
+        FilterButtonAppear(waterfilter_button, viewfilter_button, campingfilter_button);
     }
+
+    private String requestDirection(String reqUrl) throws IOException {
+        String responseString = "";
+        InputStream inputStream = null;
+        HttpURLConnection httpURLConnection = null;
+        try {
+            URL url = new URL(reqUrl);
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.connect();
+            inputStream = httpURLConnection.getInputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuffer stringBuffer = new StringBuffer();
+            String line = "";
+            while ((line = bufferedReader.readLine()) != null)
+                stringBuffer.append(line);
+            responseString = stringBuffer.toString();
+            bufferedReader.close();
+            inputStreamReader.close();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null)
+                inputStream.close();
+            httpURLConnection.disconnect();
+        }
+        return responseString;
+    }
+
+    private String getRequestUrl(LatLng origin, LatLng dest) {
+        String str_org = "origin=" + origin.latitude + "," + origin.longitude;
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        String sensor = "sensor=false";
+        String mode = "mode=driving";
+        //String mode = "mode=walking";
+        String param = str_org + "&" + str_dest + "&" + sensor + "&" + mode;
+        String output = "json";
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param;
+        return url;
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case LOCATION_REQUEST:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    mMap.setMyLocationEnabled(true);
+                break;
+        }
+    }
+
+    public class TaskRequestDirection extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String responseString = "";
+            try {
+                responseString = requestDirection(strings[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return responseString;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            TaskParser taskParser = new TaskParser();
+            taskParser.execute(s);
+        }
+    }
+
+    public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String, String>>>> {
+
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... strings) {
+            JSONObject jsonObject = null;
+            List<List<HashMap<String, String>>> routes = null;
+            try {
+                jsonObject = new JSONObject(strings[0]);
+                DirectionsParser directionsParser = new DirectionsParser();
+                routes = directionsParser.parse(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return routes;
+        }
+
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> lists) {
+            ArrayList points = null;
+            PolylineOptions polylineOptions = null;
+            for (List<HashMap<String, String>> path : lists) {
+                points = new ArrayList();
+                polylineOptions = new PolylineOptions();
+                for (HashMap<String, String> point : path) {
+                    double lat = Double.parseDouble(point.get("lat"));
+                    double lon = Double.parseDouble(point.get("lon"));
+                    https://maps.googleapis.com/maps/api/directions/
+                    points.add(new LatLng(lat, lon));
+                }
+                polylineOptions.addAll(points);
+                polylineOptions.width(8);
+                polylineOptions.color(Color.GREEN);
+                polylineOptions.geodesic(true);
+            }
+
+            if (polylineOptions != null)
+                mMap.addPolyline(polylineOptions);
+            else
+                Toast.makeText(getApplicationContext(), "Direction not set", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /*TRAJET */
 
     public void InfoDialog(Marker marker) {
 
@@ -269,15 +449,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 if (!editTextName.getText().toString().isEmpty()) {
+                    String type = spinner.getSelectedItem().toString();
+                    if (type.contains("vue"))
+                        newMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                    else if (type.contains("eau"))
+                        newMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+                    else if (type.contains("campement"))
+                        newMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    else if (type.contains("Autre"))
+                        newMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
+
                     newMarker.title(editTextName.getText().toString()).snippet("Type: " + spinner.getSelectedItem().toString());
                     Toast.makeText(MapsActivity.this, "New point added !", Toast.LENGTH_SHORT).show();
                     Marker marker = mMap.addMarker(newMarker);
-                    markerList.put(marker.getId(), new Point(marker, new ArrayList<Bitmap>(photoListTmp)));
+                    Point newPoint = new Point(marker, new ArrayList<Bitmap>(photoListTmp));
+                    markerList.put(marker.getId(), newPoint);
                     dialog.dismiss();
                     System.out.println("Lat = " + newMarker.getPosition().latitude);
                     System.out.println("Long = " + newMarker.getPosition().longitude);
 
-                    httpRequest.PostPois(editTextName.getText().toString(), "no desc", newMarker.getPosition().latitude, newMarker.getPosition().longitude, spinner.getSelectedItem().toString(), token);
+                    httpRequest.PostPois(newPoint, editTextName.getText().toString(), spinner.getSelectedItem().toString(), token);
                 }
             }
         });
@@ -365,5 +556,79 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
             return null;
         }
+    }
+
+    void WaterFilterButton(Button waterfilter_button)
+    {
+        waterfilter_button.setVisibility(View.INVISIBLE);
+        waterfilter_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)  // cache tous les points d'interet de type 'water'
+            {
+                for (int i = 0; i != markerList.size(); ++i) {
+                    if (markerList.get(i).marker.getSnippet().contains("eau") && water_point_hide == true)
+                        markerList.get(i).marker.setVisible(false);
+                    else if (markerList.get(i).marker.getSnippet().contains("eau") && water_point_hide == false)
+                        markerList.get(i).marker.setVisible(true);
+                }
+                water_point_hide = (water_point_hide == true) ? false : true;
+            }
+        });
+    }
+
+    void ViewFilterButton(Button viewfilter_button)
+    {
+        viewfilter_button.setVisibility(View.INVISIBLE);
+        viewfilter_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) // cache tous les points d'interet de type 'view'
+            {
+                for (int i = 0; i != markerList.size(); ++i) {
+                    if (markerList.get(i).marker.getSnippet().contains("vue") && view_point_hide == true)
+                        markerList.get(i).marker.setVisible(false);
+                    else if (markerList.get(i).marker.getSnippet().contains("vue") && view_point_hide == false)
+                        markerList.get(i).marker.setVisible(true);
+                }
+                view_point_hide = (view_point_hide == true) ? false : true;
+            }
+        });
+    }
+
+    void CampingFilterButton(Button campingfilter_button)
+    {
+        campingfilter_button.setVisibility(View.INVISIBLE);
+        campingfilter_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) // cache tous les points d'interet de type 'camping'
+            {
+                for (int i = 0; i != markerList.size(); i++) {
+                    if (markerList.get(i).marker.getSnippet().contains("campement") && camping_point_hide == true)
+                        markerList.get(i).marker.setVisible(false);
+                    else if (markerList.get(i).marker.getSnippet().contains("campement") && camping_point_hide == false)
+                        markerList.get(i).marker.setVisible(true);
+                }
+                camping_point_hide = (camping_point_hide == true) ? false : true;
+            }
+        });
+    }
+
+    public void FilterButtonAppear(final Button waterfilter_button, final Button viewfilter_button, final Button campingfilter_button)
+    {
+        Button filter_button = (Button) findViewById(R.id.FilterBtn);
+        filter_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) // animation apparition des boutons de filtre
+            {
+                if (campingfilter_button.getVisibility() == View.VISIBLE) {
+                    campingfilter_button.setVisibility(View.INVISIBLE);
+                    waterfilter_button.setVisibility(View.INVISIBLE);
+                    viewfilter_button.setVisibility(View.INVISIBLE);
+                } else {
+                    campingfilter_button.setVisibility(View.VISIBLE);
+                    waterfilter_button.setVisibility(View.VISIBLE);
+                    viewfilter_button.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 }

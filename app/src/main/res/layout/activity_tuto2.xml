@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:textColor="@color/colorBrown"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/colorGrayB"
+                android:text="COMMENT FAIRE UN ABRIS"
+                android:gravity="center"
+                android:textSize="25dp"/>
+
+            <ImageView
+                android:id="@+id/img"
+                android:adjustViewBounds="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/abri_tente_parachute" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/colorGrayB"
+                android:textColor="@color/colorWhite"
+                android:text="Vous pouvez utiliser une bâche, des vêtements ou tout autre matériel susceptible de vous couvrir assez bien pour que vous récuperiez un maximum d'énergie pendant la nuit."/>
+
+            <ImageView
+                android:adjustViewBounds="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/abri_palmie"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/colorGrayB"
+                android:textColor="@color/colorWhite"
+                android:text="Posez les demies-feuilles sur les branches. Attention à laisser un espace équivalent à 3/4 de la hauteur de la demie-feuille pour que les feuilles constituent une protection hermétique au maximum à la lumière ou la pluie."/>
+
+            <ImageView
+                android:adjustViewBounds="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/palmie"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/colorGrayB"
+                android:textColor="@color/colorWhite"
+                android:text="Si vous trouvez des palmiers ou des feuilles assez grandes pour recouvrir votre abri de fortune, découpez ces dernières en demies-feuilles symétriques."/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
