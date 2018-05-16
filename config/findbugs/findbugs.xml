@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+
+  <!-- Exclude classes -->
+  <Match>
+    <!-- exclude android generated class -->
+    <Class name="~.*\.R\$.*"/>
+  </Match>
+  <Match>
+    <!-- exclude android generated class -->
+    <Class name="~.*\.Manifest\$.*"/>
+  </Match>
+  <Match>
+    <!--exclude auto-generated dagger classes -->
+    <Class name="~.*\.*Dagger.*"/>
+  </Match>
+  <Match>`
+    <Or>
+      <Bug pattern="SIC_INNER_SHOULD_BE_STATIC"/>
+      <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON"/>
+      <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_NEEDS_THIS"/>
+    </Or>
+  </Match>
+
+
+  <!-- Exclude bugs see http://findbugs.sourceforge.net/bugDescriptions.html -->
+
+</FindBugsFilter>
